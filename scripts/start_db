@@ -1,0 +1,57 @@
+#!/bin/ash
+
+DEVICE=br0
+COUNT=0
+until ( ethtool br0 | grep yes > /dev/null )
+do
+    COUNT=$((COUNT+1))
+    if ( [ $COUNT -gt 10 ] ); then
+        echo $DEVICE isn\'t becoming active: exiting
+    fi
+    sleep 5
+    COUNT=$((COUNT+1))
+done
+
+if ( pidof dropbear > /dev/null ); then
+    echo dropbear is running
+else
+
+if [ ! -d /etc/dropbear ]; then
+  mkdir /etc/dropbear
+  chmod 0700 /etc/dropbear
+fi
+
+if [ ! -f /etc/dropbear/dropbear_rsa_host_key ]; then
+  if [ -f /mnt/circle/mods/dropbear/dropbear_rsa_host_key ]; then
+    ln -s /mnt/circle/mods/dropbear/dropbear_rsa_host_key /etc/dropbear/dropbear_rsa_host_key
+  else
+    /mnt/circle/mods/dropbear/dropbearkey -t rsa -f /mnt/circle/mods/dropbear/dropbear_rsa_host_key
+    ln -s /mnt/circle/mods/dropbear/dropbear_rsa_host_key /etc/dropbear/dropbear_rsa_host_key
+  fi
+fi
+
+if [ ! -f /etc/dropbear/dropbear_dss_host_key ]; then
+  if [ -f /mnt/circle/mods/dropbear/dropbear_dss_host_key ]; then
+    ln -s /mnt/circle/mods/dropbear/dropbear_dss_host_key /etc/dropbear/dropbear_dss_host_key
+  else
+    /mnt/circle/mods/dropbear/dropbearkey -t dss -f /mnt/circle/mods/dropbear/dropbear_dss_host_key
+    ln -s /mnt/circle/mods/dropbear/dropbear_dss_host_key /etc/dropbear/dropbear_dss_host_key
+  fi
+fi
+
+ln -sf /mnt/circle/mods/dropbear/config /etc/config/dropbear
+ln -sf /mnt/circle/mods/dropbear/dropbear /usr/sbin/dropbear
+ln -sf /mnt/circle/mods/dropbear/dropbear /usr/bin/ssh
+ln -sf /mnt/circle/mods/dropbear/dropbear /usr/bin/dbclient
+ln -sf /mnt/circle/mods/dropbear/dropbear /usr/bin/scp
+
+LISTEN_ON=$(ip -f inet a l br0 | awk '/inet/ {print $2}' | cut -d/ -f1)
+
+echo "root:$(config get http_passwd_hashed)" | chpasswd > /dev/null 2>&1
+
+/usr/sbin/dropbear -p $LISTEN_ON:22 -I 3600 && \
+kill $(ps | grep '[t]elnetd' | awk '{print $1}')
+
+fi
+
+exit 0
