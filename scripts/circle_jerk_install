@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ ! -d /mnt/circle/mods/baks ]; then
+
+#make backups first
+mkdir /mnt/circle/mods/baks
+cp /mnt/circle/shares/usr/bin/startcircle /mnt/circle/mods/baks/startcircle.bak
+cp /mnt/circle/shares/usr/bin/stopcircle /mnt/circle/mods/baks/stopcircle.bak
+cp /mnt/circle/shares/usr/bin/ping_circle.sh /mnt/circle/mods/baks/ping_circle.sh.bak
+cp /mnt/circle/shares/usr/bin/check_update.sh /mnt/circle/mods/baks/check_update.sh.bak
+
+#now do the thing
+ln -sf /mnt/circle/mods/circle_jerk /mnt/circle/shares/usr/bin/startcircle
+ln -sf /mnt/circle/mods/circle_jerk /mnt/circle/shares/usr/bin/stopcircle
+ln -sf /mnt/circle/mods/circle_jerk /mnt/circle/shares/usr/bin/ping_circle.sh
+ln -sf /mnt/circle/mods/circle_jerk /mnt/circle/shares/usr/bin/check_update.sh
+
+else
+
+echo "Looks like you already ran me."
+
+fi

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Secure SSH daemon by ensuring any WAN traffic is blocked
+iptables -C net2loc -p tcp --dport 22 -m state --state NEW -m recent --set > /dev/null 2>&1 || \
+iptables -I net2loc 1 -p tcp --dport 22 -m state --state NEW -m recent --set
+
+# Secure SSH daemon against bruteforce attacks
+iptables -C net2loc -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 60 --hitcount 4 -j DROP > /dev/null 2>&1 || \
+iptables -I net2loc 1 -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 60 --hitcount 4 -j DROP
+
+# IPv4 TTL mod
+iptables -t mangle -C POSTROUTING -o wwan0 -j TTL --ttl-set 65 > /dev/null 2>&1 || \
+iptables -t mangle -I POSTROUTING 1 -o wwan0 -j TTL --ttl-set 65
+
+# IPv6 TTL mod (prevents leaks not covered by IPv4 rules)
+ip6tables -t mangle -C POSTROUTING -o wwan0 -j HL --hl-set 65 > /dev/null 2>&1 || \
+ip6tables -t mangle -I POSTROUTING 1 -o wwan0 -j HL --hl-set 65
+

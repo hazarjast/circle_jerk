@@ -1,0 +1,34 @@
+#!/bin/sh
+
+ENABLED=$(config get enable_circle_plc)
+RUNNING=/tmp/circle_jerk.flag
+
+# Execute these only once at boot or after enabling
+if [ ! -f $RUNNING -a $ENABLED = 1 ]
+then
+    /mnt/circle/mods/call_once
+    echo > $RUNNING
+    echo > /tmp/circle_enabled.flag
+    echo > /mnt/circle/shares/usr/bin/app_list
+    echo > /tmp/circle_running.flag
+fi
+
+# Execute these every 4 minutes when circled calls a restart
+if [ -f $RUNNING -a $ENABLED = 1 ]
+then
+    /mnt/circle/mods/call_recurring
+    echo "1"
+fi
+
+# Execute these when circle is disabled/stopped
+if [ -f $RUNNING -a $ENABLED = 0 ]
+then
+    /mnt/circle/mods/call_end
+    rm -f $RUNNING
+    rm -f /tmp/circle_enabled.flag
+    rm -f /mnt/circle/shares/usr/bin/app_list
+    rm -f /tmp/circle_running.flag
+fi
+
+exit 0
+

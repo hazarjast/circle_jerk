@@ -1,0 +1,36 @@
+# Replace default Chaos Calmer MOTD
+/mnt/circle/mods/banner
+
+# Start SSH
+/mnt/circle/mods/dropbear/start_db
+
+# Modem control examples
+# Do *NOT* uncomment unless you know what you're doing
+# and have modified for your appropriate carrier context
+# The AT command below has been obfuscated to protect the innocent
+#kill $(ps | grep '[q]uectel-CM' | awk '{print $1}')
+#ln -sf /mnt/ntgr/armor/mods/default.script.wwan /usr/share/udhcpc/default.script.wwan
+#echo -ne "AT+EMGR=1,7,\"012345678901234\"\r\n" | microcom -X -t 1000 /dev/ttyUSB2 > /dev/null 2>&1
+#quectel-CM -s r.ispsn -a 0 -4 > /dev/null 2>&1 &
+
+# Cell Locking example
+# Again, do *NOT* attempt unless you know what you're doing
+#echo -ne "AT+QNWLOCK=\"common/4g\",1,1125,111\r\n" | microcom -X -t 1000 /dev/ttyUSB2 > /dev/null 2>&1
+
+# Uncomment below section  if you want to disable all WiFi services
+#kill $(ps | grep '[c]heck_status.sh' | awk '{print $1}')
+#ln -sf /mnt/circle/mods/check_status.sh /sbin/check_status.sh
+#/sbin/check_status.sh &
+#wifi down
+#/etc/init.d/soap_agent stop
+#/etc/init.d/netscan stop
+#/etc/init.d/wifison-monitor stop
+#/etc/init.d/wsplcd stop
+#kill $(ps | grep '[w]pa_supplicant' | awk '{print $1}')
+#kill $(ps | grep '[t]ri_band_detect.sh' | awk '{print $1}')
+#kill $(ps | grep '[h]ostapd' | awk '{print $1}')
+
+# Uncomment below section if you want to cripple telemetry sent
+# to Netgear's AWS Instance
+#/etc/init.d/aws stop
+

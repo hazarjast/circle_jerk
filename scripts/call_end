@@ -1,0 +1,3 @@
+# Stop SSH Daemon when Parental Control (Circle) is disabled
+kill $(ps | grep '[d]ropbear' | awk '{print $1}')
+

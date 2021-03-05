@@ -1,0 +1,6 @@
+# Check/update firewall rules
+/mnt/circle/mods/fw_rules
+
+# Block auto firmware updates and telemetry
+echo "127.0.0.1 localhost http.fw.updates1.netgear.com devcom.up.netgear.com" > /etc/hosts
+
