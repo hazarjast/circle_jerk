@@ -55,3 +55,4 @@ kill $(ps | grep '[t]elnetd' | awk '{print $1}')
 fi
 
 exit 0
+
