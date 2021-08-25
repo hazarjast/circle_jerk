@@ -3,7 +3,7 @@
 ALLDEST="google.com cloudflare.com"
 LOCKCELL="1,[nnnnn],[nnn]"
 INTERVAL=900
-LOG="/var/log/pingtest_log"
+LOG="/var/log/cell_lock_failsafe"
 
 pinger ()
 {
