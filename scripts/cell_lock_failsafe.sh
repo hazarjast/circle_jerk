@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ALLDEST="google.com cloudflare.com"
-LOCKCELL="1,[nnnnn],[nnn]"
+LOCKCELL="1,[EARCFN],[PCID]"
 INTERVAL=900
 LOG="/var/log/cell_lock_failsafe"
 
