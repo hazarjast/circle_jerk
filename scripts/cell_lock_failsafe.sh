@@ -5,6 +5,10 @@ LOCKCELL="1,[EARCFN],[PCID]"
 INTERVAL=900
 LOG="/var/log/cell_lock_failsafe"
 
+# Added below 2 minute wait before first run for those calling the script from 'rc.local'
+# If not running on device startup, you can comment out this sleep command.
+sleep 120
+
 pinger ()
 {
 CONNECTED=0
