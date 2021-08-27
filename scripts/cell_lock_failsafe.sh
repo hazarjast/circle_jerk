@@ -68,7 +68,7 @@ do
           echo "$(date) -  Internet is accessible again!" >> $LOG
 	  if [ $CELLFAIL -ge 2 ]
 	  then
-              MIDNIGHT=`echo $(($(date -d 23:59:59 +%s) - $(date +%s) + 1))
+              MIDNIGHT=`echo $(($(date -d 23:59:59 +%s) - $(date +%s) + 1))`
 	      echo  "$(date) -  Locking to selected cell disrupted Internet connectivity twice in the last hour." >> $LOG
 	      echo  "$(date) -  Waiting until tomorrow before attempting to lock the preferred cell again." >> $LOG
 	      sleep $MIDNIGHT
