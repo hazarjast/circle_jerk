@@ -47,7 +47,6 @@ do
               if [ $CONNECTED -eq 1 ]
               then
                   echo  "$(date) -  Internet reachable, cell lock successful!" >> $LOG
-		  CELLFAIL=0
 	      else
 	          CELLFAIL=`expr $CELLFAIL + 1`    
               fi  
