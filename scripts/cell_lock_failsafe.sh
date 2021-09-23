@@ -60,8 +60,8 @@ do
   then
       echo "$(date) -  No Internet connectivity. Removing cell lock..." >> $LOG
       echo -ne "AT+QNWLOCK=\"common/4g\",0\r\n" | microcom -X -t 1000 /dev/ttyUSB2 >/dev/null 2>/dev/null
-      echo "$(date) -  Cell lock removed, waiting 30 seconds for reconnect..." >> $LOG
-      sleep 30
+      echo "$(date) -  Cell lock removed, waiting one minute for reconnect..." >> $LOG
+      sleep 60
       pinger
       if [ $CONNECTED -eq 1 ]
       then
